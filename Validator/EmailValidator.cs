@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Net.Mail;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Validator
 {
     public class EmailValidator : AbstractValidator<String>
     {
-        bool _invalid = false;
+        bool _isInvalid = false;
 
         private string DomainMapper(Match match)
         {
@@ -20,13 +25,13 @@ namespace Validator
             }
             catch (ArgumentException)
             {
-                _invalid = true;
+                _isInvalid = true;
             }
             return match.Groups[1].Value + domainName;
         }
         public override bool IsValid(String input)
         {
-            _invalid = false;
+            _isInvalid = false;
             if (String.IsNullOrEmpty(input))
                 return false;
 
@@ -41,7 +46,7 @@ namespace Validator
                 return false;
             }
 
-            if (_invalid)
+            if (_isInvalid)
                 return false;
 
             // Return true if input is in valid e-mail format.
